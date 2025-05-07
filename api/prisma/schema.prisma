@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Employee {
+  id        Int        @id @default(autoincrement())
+  number    Int        @unique
+  name      String
+  photoUrl  String?
+  cards     Card[]
+  accesses  AccessLog[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Card {
+  uid         String   @id
+  employeeId  Int
+  employee    Employee @relation(fields: [employeeId], references: [id])
+  linkedAt    DateTime @default(now())
+}
+
+model AccessLog {
+  id         Int       @id @default(autoincrement())
+  employeeId Int
+  employee   Employee  @relation(fields: [employeeId], references: [id])
+  kioskId    String
+  method     AccessMethod
+  timestamp  DateTime  @default(now())
+}
+
+enum AccessMethod {
+  RFID
+  MANUAL
+}

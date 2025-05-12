@@ -11,7 +11,7 @@ const ndef = require("ndef");
 
 /* -------------- Config ---------------------------------------- */
 const PORT = process.env.AGENT_PORT || 3030;
-const API_URL = process.env.API_URL || "http://localhost:3000";
+const API_URL = process.env.API_URL || "http://192.168.1.141:3000";
 const ADMIN_KEY = process.env.ADMIN_KEY || ""; // si /access/link-card exige guard
 const ENABLE_UL_WRITE = !!process.env.ENABLE_UL_WRITE; // activa comando especial
 /* -------------------------------------------------------------- */
@@ -19,7 +19,7 @@ const ENABLE_UL_WRITE = !!process.env.ENABLE_UL_WRITE; // activa comando especia
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:3001",
+    origin: "http://192.168.1.141:3001",
     methods: ["POST", "OPTIONS"],
     allowedHeaders: ["Content-Type"],
   })

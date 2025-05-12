@@ -11,6 +11,7 @@ export function useEmployees() {
   );
 
   const create = async (payload: any) => {
+    console.log(payload)
     await api("/employees", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

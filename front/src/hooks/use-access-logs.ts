@@ -30,7 +30,7 @@ export function useAccessLogs(query: string) {
 
   // live update
   useEffect(() => {
-    const socket = io("http://localhost:3000");
+    const socket = io("http://192.168.1.141:3000");
     socket.on("access", () => mutate());
     return () => {
       socket.close();

@@ -9,7 +9,7 @@ import { OnModuleInit } from '@nestjs/common';
 
 @WebSocketGateway({
   cors: {
-    origin: 'http://localhost:3001', // front
+    origin: '*', // front
     credentials: true,
   },
 })

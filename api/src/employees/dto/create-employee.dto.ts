@@ -2,8 +2,8 @@
 import { IsNotEmpty, IsOptional, IsString, Min } from 'class-validator';
 
 export class CreateEmployeeDto {
+
   @IsString()
-  @Min(1)
   number: string;
 
   @IsString()

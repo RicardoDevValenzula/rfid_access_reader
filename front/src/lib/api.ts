@@ -1,6 +1,6 @@
 export async function api<T>(path: string, init: RequestInit = {}) {
   console.log(path);
-  const res = await fetch(`http://localhost:3000${path}`, {
+  const res = await fetch(`http://192.168.1.141:3000${path}`, {
     ...init,
     headers: {
       ...(init.headers || {}),

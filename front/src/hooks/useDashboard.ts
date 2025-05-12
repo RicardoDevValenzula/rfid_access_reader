@@ -28,7 +28,7 @@ export function useDashboard() {
 
   /* ‑ actualiza cuando llegue un nuevo acceso */
   useEffect(() => {
-    const s = io("http://localhost:3000");
+    const s = io("http://192.168.1.141:3000");
     s.on("access", () => mutate());
     return () => {
       s.close();

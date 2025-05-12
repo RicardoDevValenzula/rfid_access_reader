@@ -9,6 +9,7 @@ export class EmployeesService {
   constructor(private prisma: PrismaService) {}
 
   create(dto: CreateEmployeeDto) {
+    console.log(CreateEmployeeDto);
     return this.prisma.employee.create({ data: dto });
   }
 

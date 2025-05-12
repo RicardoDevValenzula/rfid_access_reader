@@ -7,7 +7,7 @@ export default function ManualPage() {
   const router = useRouter();
 
   async function submit() {
-    await fetch("http://localhost:3000/access/manual", {
+    await fetch("http://192.168.1.141:3000/access/manual", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

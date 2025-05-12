@@ -17,12 +17,9 @@ nfc.on("reader", (reader) => {
   reader.on("card", async (card) => {
     const uid = card.uid;
 
-    // Si es la misma tarjeta que sigue presente → ignora
-    if (uid === currentUid) return;
-
     // Anti‑rebote: ignora si pasó <1 s desde la última lectura enviada
     const now = Date.now();
-    if (now - lastSentAt < 1000) return;
+    if (now - lastSentAt < 3000) return;
 
     currentUid = uid;
     lastSentAt = now;

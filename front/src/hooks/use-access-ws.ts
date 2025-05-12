@@ -7,7 +7,7 @@ import { io } from "socket.io-client";
 
 export function useAccessWS(onAccess: (log: any) => void) {
   useEffect(() => {
-    const socket = io("http://localhost:3000", {
+    const socket = io("http://192.168.1.141:3000", {
       path: "/socket.io", // default
       transports: ["websocket"],
     });

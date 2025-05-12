@@ -27,6 +27,7 @@ export class EmployeesController {
 
   @Post()
   create(@Body() dto: CreateEmployeeDto) {
+    console.log(CreateEmployeeDto);
     return this.svc.create(dto);
   }
 

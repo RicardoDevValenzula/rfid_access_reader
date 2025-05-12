@@ -114,6 +114,7 @@ export default function EmployeesPage() {
       if (data.photo) await uploadPhoto(editingEmployee.id, data.photo);
       toast.success("Empleado actualizado");
     } else {
+      console.log(data.number)
       await create({ name: data.name, number: data.number });
       toast.success("Empleado creado");
     }

@@ -1,13 +1,13 @@
-export default function KioskLayout({
+import "../globals.css";
+
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <html>
-      <body className="h-screen w-screen bg-black text-white flex items-center justify-center select-none">
-        {children}
-      </body>
+      <body className="min-h-screen bg-white antialiased">{children}</body>
     </html>
   );
 }

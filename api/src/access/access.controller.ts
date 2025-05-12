@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { AccessService } from './access.service';
+import { AccessLogQueryDto } from './dtos/access.log.dto';
 
 @Controller('access')
 export class AccessController {
@@ -15,7 +16,7 @@ export class AccessController {
 
   // NUEVO
   @Post('manual')
-  async manual(@Body() dto: { employeeNumber: number; kioskId: string }) {
+  async manual(@Body() dto: { employeeNumber: string; kioskId: string }) {
     const employee = await this.svc.manual(dto.employeeNumber, dto.kioskId);
     return employee ? { ok: true, employee } : { ok: false };
   }
@@ -25,5 +26,10 @@ export class AccessController {
   async latest(@Query('kioskId') kioskId: string) {
     const log = await this.svc.latest(kioskId);
     return log ? { ok: true, employee: log.employee } : { ok: false };
+  }
+
+  @Get('logs')
+  getLogs(@Query() q: AccessLogQueryDto) {
+    return this.svc.getLogs(q);
   }
 }

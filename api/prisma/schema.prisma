@@ -13,9 +13,16 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model Admin {
+  id        Int      @id @default(autoincrement())
+  name      String
+  key       String   @unique
+  createdAt DateTime @default(now())
+}
+
 model Employee {
   id        Int        @id @default(autoincrement())
-  number    Int        @unique
+  number    String        @unique
   name      String
   photoUrl  String?
   cards     Card[]

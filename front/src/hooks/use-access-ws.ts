@@ -5,19 +5,24 @@
 import { useEffect } from "react";
 import { io } from "socket.io-client";
 
-export function useAccessWS(onAccess: (log: any) => void) {
+export function useAccessWS(kioskid: string, onAccess: (log: any) => void) {
   useEffect(() => {
     const socket = io("http://192.168.1.141:3000", {
-      path: "/socket.io", // default
+      path: "/socket.io",
+      query: {kioskid},
       transports: ["websocket"],
     });
 
     socket.on("connect", () => console.log("WS connected ✨"));
-    socket.on("access", onAccess);
+    socket.on("access", (data)=>{
+      if(data.kioskid === kioskid){
+        onAccess(data)
+      }
+    });
     socket.on("disconnect", () => console.log("WS disconnected"));
 
     return () => {
       socket.disconnect();
     };
-  }, [onAccess]);
+  }, [kioskid,onAccess]);
 }

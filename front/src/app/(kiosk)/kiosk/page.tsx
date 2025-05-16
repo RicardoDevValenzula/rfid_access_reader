@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useAccessWS } from "@/hooks/use-access-ws";
 import { speakName } from "@/lib/speech";
+import { useSearchParams } from "next/navigation";
 
 type Employee = {
   id: number;
@@ -12,10 +13,12 @@ type Employee = {
   number: number;
 };
 
-export default function KioskPage() {
+ function KioskClient() {
+  const searchParams = useSearchParams();
+  const kioskId = searchParams.get("kioskId");
   const [employee, setEmployee] = useState<Employee | null>(null);
 
-  useAccessWS((log) => {
+  useAccessWS(kioskId || "",(log) => {
     setEmployee(log.employee);
     speakName(log.employee.name);
     setTimeout(() => setEmployee(null), 3000);
@@ -77,4 +80,12 @@ export default function KioskPage() {
       </div>
     </div>
   );
+}
+
+export default function KioskPage(){
+  return(
+    <Suspense fallback={<div>Cargando Kiosko..</div>}>
+      <KioskClient/>
+    </Suspense>
+  )
 }

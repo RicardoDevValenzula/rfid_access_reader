@@ -64,6 +64,7 @@ export default function EmployeesPage() {
   const [editingEmployee, setEditingEmployee] = useState<any>(null);
   const [showEnroll, setShowEnroll] = useState(false);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   /* Paginación */
   const PAGE_SIZE = 10;
@@ -79,8 +80,12 @@ export default function EmployeesPage() {
     uploadPhoto,
   } = useEmployees();
 
-  const totalPages = Math.ceil(employees.length / PAGE_SIZE) || 1;
-  const paged = employees.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const filteredEmployees = employees.filter(
+    (emp) => emp.name.toLowerCase().includes(searchTerm.toLowerCase()) || String(emp.number).includes(searchTerm),
+  )
+
+  const totalPages = Math.ceil(filteredEmployees.length / PAGE_SIZE) || 1
+  const paged = filteredEmployees.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   useEffect(() => {
     if (page > totalPages) setPage(totalPages);
@@ -249,6 +254,49 @@ export default function EmployeesPage() {
         </Dialog>
       </div>
 
+      <div className="mb-4">
+        <div className="relative">
+          <Input
+            type="text"
+            placeholder="Buscar por nombre o número de empleado..."
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value)
+              setPage(1) // Resetear a la primera página al buscar
+            }}
+            className="pl-10"
+          />
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <svg
+              className="w-4 h-4 text-gray-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </div>
+          {searchTerm && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="absolute inset-y-0 right-0 px-3"
+              onClick={() => {
+                setSearchTerm("")
+                setPage(1)
+              }}
+            >
+              ×
+            </Button>
+          )}
+        </div>
+      </div>
       {/* Tabla */}
       <div className="rounded-lg border bg-white shadow-sm">
         {isLoading ? (

@@ -8,12 +8,21 @@ export function speakName(name: string) {
     `Bienvenido ${name.replace(/_/g, " ")}`
   );
 
-  // Intenta escoger una voz en español
+  
   const voices = window.speechSynthesis.getVoices();
-  const mx =
-    voices.find((v) => v.lang === "es-MX") || // Chrome normalmente trae “Google español de México”
-    voices.find((v) => v.lang.startsWith("es")); // cualquier español
-  if (mx) utter.voice = mx;
+   const sabina = voices.find(
+    (v) => v.name.toLowerCase().includes("sabina") && v.lang === "es-MX"
+  );
+
+  if (sabina) {
+    utter.voice = sabina;
+  } else {
+    // fallback en caso de que Sabina no esté disponible
+    const fallback =
+      voices.find((v) => v.lang === "es-MX") ||
+      voices.find((v) => v.lang.startsWith("es"));
+    if (fallback) utter.voice = fallback;
+  }
 
   utter.rate = 1.0; // velocidad (0.1 – 10)
   utter.pitch = 1.0; // tono (0 – 2)

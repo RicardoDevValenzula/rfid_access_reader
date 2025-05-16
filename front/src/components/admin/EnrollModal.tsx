@@ -22,6 +22,7 @@ export function EnrollModal({
   useEffect(() => {
     if (!open) return;
     const id = setInterval(async () => {
+      setState("pending");
       const res = await fetch("http://localhost:3030/enroll/status");
       const { state } = await res.json();
       if (state === "success" || state === "error") {

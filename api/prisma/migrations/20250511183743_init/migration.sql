@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE `employee` MODIFY `number` VARCHAR(191) NOT NULL;
+ALTER TABLE `Employee` MODIFY `number` VARCHAR(191) NOT NULL;

@@ -16,7 +16,7 @@ export function useAccessWS(kioskid: string, onAccess: (log: any) => void) {
 
     socket.on("connect", () => console.log("WS connected ✨"));
     socket.on("access", (data)=>{
-      if(data.kioskid === kioskid){
+      if(data.kioskId === kioskid){
         onAccess(data)
       }
     });

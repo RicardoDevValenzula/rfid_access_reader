@@ -31,7 +31,7 @@ export class AccessGateway implements OnModuleInit, OnGatewayConnection {
 
   // // Se llama desde el service cuando hay nuevo acceso
   broadcastAccess(log: any) {
-    const kioskid = log.kioskid;
+    const kioskid = log.kioskId;
     const client = this.kioskSocket.get(kioskid);
     if(client){
       client.emit("access",log)

@@ -11,7 +11,7 @@ const ndef = require("ndef");
 
 /* -------------- Config ---------------------------------------- */
 const PORT = process.env.AGENT_PORT || 3030;
-const API_URL = process.env.API_URL || "http://192.168.1.141:3000";
+const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3000";
 const ADMIN_KEY = process.env.ADMIN_KEY || ""; // si /access/link-card exige guard
 const ENABLE_UL_WRITE = !!process.env.ENABLE_UL_WRITE; // activa comando especial
 /* -------------------------------------------------------------- */
@@ -103,7 +103,7 @@ nfc.on("reader", (reader) => {
 
       // 6. Vincular UID ↔ empleado en backend
       await axios.post(
-        `${API_URL}/employees/link-card`,
+        `${API_BASE_URL}/employees/link-card`,
         { uid: card.uid, employeeNumber: employeeNumber },
         { headers: ADMIN_KEY ? { "x-admin-key": ADMIN_KEY } : {} }
       );

@@ -6,7 +6,8 @@ const axios = require("axios");
 const { NFC } = require("nfc-pcsc");
 
 const KIOSK_ID = process.env.KIOSK_ID || "kiosk-1";
-const API_URL = process.env.API_URL || "http://localhost:3000/access/card-read";
+const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3000";
+const API_URL = `${API_BASE_URL}/access/card-read`;
 const STATUS_PORT = process.env.READER_AGENT_PORT || 3040;
 
 /* -------------- Status server ----------------------------------

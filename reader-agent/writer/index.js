@@ -40,6 +40,26 @@ app.post("/enroll", (req, res) => {
 });
 app.get("/enroll/status", (_req, res) => res.json({ state: lastState }));
 
+/* ----------- POST /scan  ----------------------------------------
+ * Lectura simple, sin escribir nada en la tarjeta. Se usa para
+ * identificar a alguien por su UID (ej. reemplazos en el admin). */
+let scanPending = null; // { resolve }
+let scanState = "idle";
+let scanUid = null;
+
+app.post("/scan/start", (req, res) => {
+  if (pending) return res.status(409).send("writer busy enrolling a tag");
+  if (scanPending) return res.status(409).send("already scanning");
+
+  scanUid = null;
+  scanState = "pending";
+  scanPending = { resolve: () => res.send("OK") };
+  console.log("🔎  Esperando tag para escanear…");
+});
+app.get("/scan/status", (_req, res) =>
+  res.json({ state: scanState, uid: scanUid })
+);
+
 app.listen(PORT, () =>
   console.log(`✏️  Writer-API listo  ➜  http://localhost:${PORT}/enroll`)
 );
@@ -64,6 +84,20 @@ nfc.on("reader", (reader) => {
   })();
 
   reader.on("card", async (card) => {
+    if (scanPending) {
+      const { resolve } = scanPending;
+      scanUid = card.uid;
+      scanState = "success";
+      console.log(`🔎  Tag leído: ${card.uid}`);
+      resolve();
+      scanPending = null;
+      setTimeout(() => {
+        scanState = "idle";
+        scanUid = null;
+      }, 3000);
+      return;
+    }
+
     if (!pending) return;
 
     const { employeeNumber, resolve } = pending;

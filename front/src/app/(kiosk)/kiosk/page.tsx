@@ -25,26 +25,54 @@ type Employee = {
   });
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center bg-white p-4 relative">
-      <div className="absolute top-6 left-4 w-[100px] h-[100px]">
-        <Image src={"/kiosk/left.webp"} width={100} height={100} alt={""} />
+    <div className="flex h-screen flex-col items-center justify-center bg-white p-4 relative overflow-hidden">
+      {/* Bordes decorativos laterales */}
+      <div className="absolute left-0 top-0 h-full w-[50px] sm:w-[70px]">
+        <Image
+          src={"/kiosk-update/Ambiente-sistema-Gráficos-laterales.png"}
+          fill
+          alt=""
+          className="object-cover"
+        />
+      </div>
+      <div className="absolute right-0 top-0 h-full w-[50px] sm:w-[70px] scale-x-[-1]">
+        <Image
+          src={"/kiosk-update/Ambiente-sistema-Gráficos-laterales.png"}
+          fill
+          alt=""
+          className="object-cover"
+        />
       </div>
 
-      <div className="absolute top-6 right-4 w-[100px] h-[100px]">
-        <Image src={"/kiosk/rigth.webp"} width={100} height={100} alt={""} />
+      {/* Jaguar y Quetzalcóatl flotantes */}
+      <div className="absolute left-[10%] top-1/2 -translate-y-1/2 w-[120px] sm:w-[160px]">
+        <Image
+          src={"/kiosk-update/Ambiente-sistema-imagen-jaguar.png"}
+          width={160}
+          height={160}
+          alt=""
+          className="w-full h-auto"
+        />
+      </div>
+      <div className="absolute right-[10%] top-1/2 -translate-y-1/2 w-[120px] sm:w-[160px]">
+        <Image
+          src={"/kiosk-update/Ambiente-sistema-Quetzalcoatl.png"}
+          width={160}
+          height={160}
+          alt=""
+          className="w-full h-auto"
+        />
       </div>
 
       {/* Contenido principal */}
       <div className="min-h-screen grid grid-rows-3 place-items-center place-content-between w-full max-w-4xl">
-        {/* Aquí iría el logo principal - lo pondrás después */}
         <div className="h-[150px] flex items-center justify-center">
-          <video
-            src="/kiosk/video.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            style={{ width: "100%", height: "auto" }}
+          <Image
+            src={"/kiosk-update/Ambiente-sistema-logo-CEO.png"}
+            width={500}
+            height={150}
+            alt="Congreso Estatal Ordinario"
+            className="h-full w-auto"
           />
         </div>
 
@@ -62,19 +90,13 @@ type Employee = {
           )}
         </div>
 
-        <div className="flex flex-row gap-10 items-center justify-center">
+        <div className="flex items-center justify-center">
           <Image
-            src={"/kiosk/bottom.webp"}
-            width={500}
-            height={6000}
-            alt={""}
-          />
-          <Image src={"/kiosk/logo.webp"} width={100} height={100} alt={""} />
-          <Image
-            src={"/kiosk/bottom2.webp"}
-            width={500}
-            height={6000}
-            alt={""}
+            src={"/kiosk-update/Ambiente-sistema-gráficos-pie.png"}
+            width={700}
+            height={150}
+            alt=""
+            className="w-full max-w-2xl h-auto"
           />
         </div>
       </div>

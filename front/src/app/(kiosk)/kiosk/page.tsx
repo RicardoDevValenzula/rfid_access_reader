@@ -101,7 +101,7 @@ type Employee = {
               </div>
             ) : (
               employee && (
-                <div className="animate-fade-in">
+                <div className="animate-in fade-in zoom-in-95 duration-500">
                   <h1 className="text-[#8B1E3F] font-bold leading-tight text-[5.5cqw] mb-[1cqw]">
                     BIENVENIDO
                   </h1>

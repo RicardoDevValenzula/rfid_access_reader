@@ -28,4 +28,5 @@ export interface Replacement {
 
 export interface AttendanceReportRow extends Employee {
   accessCount: number;
+  lastAccessAt: string | null;
 }

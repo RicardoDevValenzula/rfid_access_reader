@@ -8,9 +8,20 @@ export class ReportsService {
   async attendance() {
     const employees = await this.prisma.employee.findMany({
       where: { accesses: { some: {} } },
-      include: { _count: { select: { accesses: true } } },
+      include: {
+        _count: { select: { accesses: true } },
+        accesses: {
+          orderBy: { timestamp: 'desc' },
+          take: 1,
+          select: { timestamp: true },
+        },
+      },
     });
-    return employees.map((e) => ({ ...e, accessCount: e._count.accesses }));
+    return employees.map(({ accesses, _count, ...e }) => ({
+      ...e,
+      accessCount: _count.accesses,
+      lastAccessAt: accesses[0]?.timestamp ?? null,
+    }));
   }
 
   replaced() {

@@ -13,6 +13,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Download } from "lucide-react";
+import { exportToExcel } from "@/lib/export-excel";
+
+function formatDate(value: string | null) {
+  if (!value) return "—";
+  return new Date(value).toLocaleString("es-MX", {
+    dateStyle: "short",
+    timeStyle: "short",
+  });
+}
 
 export default function ReportsPage() {
   const { data: attendance, isLoading: loadingAttendance } =
@@ -20,13 +31,45 @@ export default function ReportsPage() {
   const { data: replaced, isLoading: loadingReplaced } = useReplacedReport();
   const { data: absent, isLoading: loadingAbsent } = useAbsentReport();
 
+  function handleExport() {
+    exportToExcel(`reportes-${new Date().toISOString().slice(0, 10)}.xlsx`, {
+      Asistencia: attendance.map((row) => ({
+        Nombre: row.name,
+        Número: row.number,
+        Accesos: row.accessCount,
+        "Último acceso": formatDate(row.lastAccessAt),
+      })),
+      Reemplazos: replaced.map((row) => ({
+        "Empleado original": row.originalEmployee.name,
+        "Número original": row.originalEmployee.number,
+        Reemplazante: row.replacementEmployee.name,
+        "Número reemplazante": row.replacementEmployee.number,
+        Fecha: formatDate(row.createdAt),
+      })),
+      Ausentes: absent.map((row) => ({
+        Nombre: row.name,
+        Número: row.number,
+      })),
+    });
+  }
+
   return (
     <div className="animate-in fade-in duration-500 space-y-10">
-      <div>
-        <h2 className="text-2xl font-bold text-[#7A2430]">Reportes</h2>
-        <p className="text-muted-foreground">
-          Asistencia, reemplazos y ausencias de los empleados.
-        </p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h2 className="text-2xl font-bold text-[#7A2430]">Reportes</h2>
+          <p className="text-muted-foreground">
+            Asistencia, reemplazos y ausencias de los empleados.
+          </p>
+        </div>
+        <Button
+          onClick={handleExport}
+          disabled={loadingAttendance || loadingReplaced || loadingAbsent}
+          className="bg-[#7A2430] hover:bg-[#7A2430]/90"
+        >
+          <Download className="mr-2 h-4 w-4" />
+          Descargar Excel
+        </Button>
       </div>
 
       <section className="space-y-4">
@@ -43,6 +86,7 @@ export default function ReportsPage() {
                   <TableHead>Nombre</TableHead>
                   <TableHead>Número</TableHead>
                   <TableHead className="text-right">Accesos</TableHead>
+                  <TableHead>Último acceso</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -53,6 +97,7 @@ export default function ReportsPage() {
                     <TableCell className="text-right">
                       {row.accessCount}
                     </TableCell>
+                    <TableCell>{formatDate(row.lastAccessAt)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -74,6 +119,7 @@ export default function ReportsPage() {
                 <TableRow>
                   <TableHead>Empleado original</TableHead>
                   <TableHead>Reemplazante</TableHead>
+                  <TableHead>Fecha</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -85,6 +131,7 @@ export default function ReportsPage() {
                     <TableCell>
                       {row.replacementEmployee.name} ({row.replacementEmployee.number})
                     </TableCell>
+                    <TableCell>{formatDate(row.createdAt)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

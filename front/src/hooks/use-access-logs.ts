@@ -2,7 +2,7 @@
 "use client";
 
 import useSWR from "swr";
-import { api } from "@/lib/api";
+import { api, API_URL } from "@/lib/api";
 import { useEffect } from "react";
 import { io } from "socket.io-client";
 import { AccessLog } from "./types";
@@ -30,7 +30,7 @@ export function useAccessLogs(query: string) {
 
   // live update
   useEffect(() => {
-    const socket = io("http://192.168.1.141:3000");
+    const socket = io(API_URL);
     socket.on("access", () => mutate());
     return () => {
       socket.close();

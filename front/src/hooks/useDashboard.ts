@@ -1,7 +1,7 @@
 // front/src/hooks/use-dashboard.ts
 "use client";
 import useSWR from "swr";
-import { api } from "@/lib/api";
+import { api, API_URL } from "@/lib/api";
 import { io } from "socket.io-client";
 import { useEffect } from "react";
 
@@ -28,7 +28,7 @@ export function useDashboard() {
 
   /* ‑ actualiza cuando llegue un nuevo acceso */
   useEffect(() => {
-    const s = io("http://192.168.1.141:3000");
+    const s = io(API_URL);
     s.on("access", () => mutate());
     return () => {
       s.close();

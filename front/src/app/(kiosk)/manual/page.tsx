@@ -1,13 +1,14 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { API_URL } from "@/lib/api";
 
 export default function ManualPage() {
   const [number, setNumber] = useState("");
   const router = useRouter();
 
   async function submit() {
-    await fetch("http://192.168.1.141:3000/access/manual", {
+    await fetch(`${API_URL}/access/manual`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

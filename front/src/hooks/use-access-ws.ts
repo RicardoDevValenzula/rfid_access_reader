@@ -4,10 +4,11 @@
 
 import { useEffect } from "react";
 import { io } from "socket.io-client";
+import { API_URL } from "@/lib/api";
 
 export function useAccessWS(kioskid: string, onAccess: (log: any) => void) {
   useEffect(() => {
-    const socket = io("http://192.168.1.141:3000", {
+    const socket = io(API_URL, {
       path: "/socket.io",
       query: {kioskid},
       transports: ["websocket"],

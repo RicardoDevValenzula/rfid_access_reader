@@ -1,6 +1,9 @@
+export const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
+
 export async function api<T>(path: string, init: RequestInit = {}) {
   console.log(path);
-  const res = await fetch(`http://192.168.1.141:3000${path}`, {
+  const res = await fetch(`${API_URL}${path}`, {
     ...init,
     headers: {
       ...(init.headers || {}),

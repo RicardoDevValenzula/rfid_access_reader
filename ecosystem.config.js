@@ -5,7 +5,7 @@ module.exports = {
       // está seteado ahí, cae al 3000 por default.
       name: "api",
       cwd: "./api",
-      script: "dist/main.js",
+      script: "dist/src/main.js",
       env: { NODE_ENV: "production" },
     },
     {

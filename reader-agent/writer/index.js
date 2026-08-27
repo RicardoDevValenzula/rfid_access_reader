@@ -19,8 +19,8 @@ const ENABLE_UL_WRITE = !!process.env.ENABLE_UL_WRITE; // activa comando especia
 const app = express();
 app.use(
   cors({
-    origin: "http://192.168.1.141:3001",
-    methods: ["POST", "OPTIONS"],
+    origin: "*",
+    methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type"],
   })
 );

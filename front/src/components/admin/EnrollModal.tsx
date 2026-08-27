@@ -15,20 +15,27 @@ export function EnrollModal({
   open: boolean;
   onDone: (ok: boolean) => void; // callback para cerrar + toast
 }) {
-  const [state, setState] = useState<"pending" | "success" | "error">(
-    "pending"
-  );
+  const [state, setState] = useState<
+    "pending" | "success" | "error" | "disconnected"
+  >("pending");
 
   useEffect(() => {
     if (!open) return;
+    setState("pending");
     const id = setInterval(async () => {
-      setState("pending");
-      const res = await fetch("http://localhost:3030/enroll/status");
-      const { state } = await res.json();
-      if (state === "success" || state === "error") {
-        setState(state);
-        clearInterval(id);
-        setTimeout(() => onDone(state === "success"), 1200);
+      try {
+        const res = await fetch("http://localhost:3030/enroll/status");
+        if (!res.ok) throw new Error("bad status");
+        const { state } = await res.json();
+        if (state === "success" || state === "error") {
+          setState(state);
+          clearInterval(id);
+          setTimeout(() => onDone(state === "success"), 1200);
+        } else {
+          setState("pending");
+        }
+      } catch {
+        setState("disconnected");
       }
     }, 1000);
     return () => clearInterval(id);
@@ -48,6 +55,8 @@ export function EnrollModal({
       ? "Acerca la tarjeta al lector…"
       : state === "success"
       ? "Tarjeta enrolada correctamente"
+      : state === "disconnected"
+      ? "Writer no detectado, por favor verificar conexión"
       : "Error al enrolar la tarjeta";
 
   return (

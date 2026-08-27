@@ -1,15 +1,36 @@
 // reader-agent/index.js
 require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
 const axios = require("axios");
 const { NFC } = require("nfc-pcsc");
 
 const KIOSK_ID = process.env.KIOSK_ID || "kiosk-1";
 const API_URL = process.env.API_URL || "http://localhost:3000/access/card-read";
+const STATUS_PORT = process.env.READER_AGENT_PORT || 3040;
+
+/* -------------- Status server ----------------------------------
+ * El reader no expone nada más: solo hace POST cuando pasa una
+ * tarjeta. Este endpoint deja que el kiosko (mismo equipo) sepa si
+ * el lector físico está conectado. */
+let readerConnected = false;
+let readerName = null;
+
+const statusApp = express();
+statusApp.use(cors());
+statusApp.get("/status", (_req, res) => {
+  res.json({ connected: readerConnected, readerName });
+});
+statusApp.listen(STATUS_PORT, () =>
+  console.log(`📡  Reader-status listo  ➜  http://localhost:${STATUS_PORT}/status`)
+);
 
 const nfc = new NFC();
 
 nfc.on("reader", (reader) => {
   console.log(`📶  Lector detectado: ${reader.name}`);
+  readerConnected = true;
+  readerName = reader.name;
 
   let currentUid = null; // UID que está actualmente en el campo
   let lastSentAt = 0; // timestamp para anti‑rebote
@@ -45,7 +66,11 @@ nfc.on("reader", (reader) => {
   });
 
   reader.on("error", (err) => console.error("Reader error", err));
-  reader.on("end", () => console.log("Reader disconnected"));
+  reader.on("end", () => {
+    console.log("Reader disconnected");
+    readerConnected = false;
+    readerName = null;
+  });
 });
 
 nfc.on("error", (err) => console.error("NFC error", err));

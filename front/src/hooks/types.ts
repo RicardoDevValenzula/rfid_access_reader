@@ -27,6 +27,6 @@ export interface Replacement {
 }
 
 export interface AttendanceReportRow extends Employee {
-  accessCount: number;
-  lastAccessAt: string | null;
+  date: string; // YYYY-MM-DD, el día que representa esta fila
+  accessCount: number; // accesos ese día
 }

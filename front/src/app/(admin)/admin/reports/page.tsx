@@ -25,6 +25,15 @@ function formatDate(value: string | null) {
   });
 }
 
+function formatDay(value: string) {
+  // value ya viene como YYYY-MM-DD; se arma en local para no
+  // desfasarse un día por interpretarlo como UTC medianoche.
+  const [year, month, day] = value.split("-").map(Number);
+  return new Date(year, month - 1, day).toLocaleDateString("es-MX", {
+    dateStyle: "short",
+  });
+}
+
 export default function ReportsPage() {
   const { data: attendance, isLoading: loadingAttendance } =
     useAttendanceReport();
@@ -36,8 +45,8 @@ export default function ReportsPage() {
       Asistencia: attendance.map((row) => ({
         Nombre: row.name,
         Número: row.number,
+        Fecha: formatDay(row.date),
         Accesos: row.accessCount,
-        "Último acceso": formatDate(row.lastAccessAt),
       })),
       Reemplazos: replaced.map((row) => ({
         "Empleado original": row.originalEmployee.name,
@@ -85,19 +94,19 @@ export default function ReportsPage() {
                 <TableRow>
                   <TableHead>Nombre</TableHead>
                   <TableHead>Número</TableHead>
-                  <TableHead className="text-right">Accesos</TableHead>
-                  <TableHead>Último acceso</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead className="text-right">Accesos ese día</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {attendance.map((row) => (
-                  <TableRow key={row.id}>
+                  <TableRow key={`${row.id}-${row.date}`}>
                     <TableCell className="font-medium">{row.name}</TableCell>
                     <TableCell>{row.number}</TableCell>
+                    <TableCell>{formatDay(row.date)}</TableCell>
                     <TableCell className="text-right">
                       {row.accessCount}
                     </TableCell>
-                    <TableCell>{formatDate(row.lastAccessAt)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

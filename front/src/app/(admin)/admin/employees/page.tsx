@@ -52,6 +52,11 @@ const employeeSchema = z.object({
   name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
   number: z.string().min(1, "El número de empleado es requerido"),
   photo: z.instanceof(File).optional(),
+  pension: z.string().optional(),
+  dependencia: z.string().optional(),
+  email: z.string().email("Email inválido").optional().or(z.literal("")),
+  telefono: z.string().optional(),
+  tipo: z.string().optional(),
 });
 type EmployeeFormValues = z.infer<typeof employeeSchema>;
 
@@ -94,7 +99,15 @@ export default function EmployeesPage() {
   /* React-hook-form */
   const form = useForm<EmployeeFormValues>({
     resolver: zodResolver(employeeSchema),
-    defaultValues: { name: "", number: "" },
+    defaultValues: {
+      name: "",
+      number: "",
+      pension: "",
+      dependencia: "",
+      email: "",
+      telefono: "",
+      tipo: "",
+    },
   });
 
   /* -------------------------------------------------------------- */
@@ -111,16 +124,21 @@ export default function EmployeesPage() {
   };
 
   const onSubmit = async (data: EmployeeFormValues) => {
+    const payload = {
+      name: data.name,
+      number: data.number,
+      pension: data.pension || undefined,
+      dependencia: data.dependencia || undefined,
+      email: data.email || undefined,
+      telefono: data.telefono || undefined,
+      tipo: data.tipo || undefined,
+    };
     if (editingEmployee) {
-      await update(editingEmployee.id, {
-        name: data.name,
-        number: data.number,
-      });
+      await update(editingEmployee.id, payload);
       if (data.photo) await uploadPhoto(editingEmployee.id, data.photo);
       toast.success("Empleado actualizado");
     } else {
-      console.log(data.number)
-      await create({ name: data.name, number: data.number });
+      await create(payload);
       toast.success("Empleado creado");
     }
     setIsDialogOpen(false);
@@ -131,14 +149,30 @@ export default function EmployeesPage() {
 
   const openEditDialog = (emp: any) => {
     setEditingEmployee(emp);
-    form.reset({ name: emp.name, number: String(emp.number) });
+    form.reset({
+      name: emp.name,
+      number: String(emp.number),
+      pension: emp.pension ?? "",
+      dependencia: emp.dependencia ?? "",
+      email: emp.email ?? "",
+      telefono: emp.telefono ?? "",
+      tipo: emp.tipo ?? "",
+    });
     setPhotoPreview(emp.photoUrl);
     setIsDialogOpen(true);
   };
 
   const openNewDialog = () => {
     setEditingEmployee(null);
-    form.reset({ name: "", number: "" });
+    form.reset({
+      name: "",
+      number: "",
+      pension: "",
+      dependencia: "",
+      email: "",
+      telefono: "",
+      tipo: "",
+    });
     setPhotoPreview(null);
     setIsDialogOpen(true);
   };
@@ -234,6 +268,81 @@ export default function EmployeesPage() {
                       <FormLabel>Número de Empleado</FormLabel>
                       <FormControl>
                         <Input placeholder="Ej: 1001" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Email */}
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input placeholder="correo@ejemplo.com" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Teléfono */}
+                <FormField
+                  control={form.control}
+                  name="telefono"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Teléfono</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Ej: 555-1234" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Pensión */}
+                <FormField
+                  control={form.control}
+                  name="pension"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Pensión</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Pensión" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Dependencia */}
+                <FormField
+                  control={form.control}
+                  name="dependencia"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Dependencia</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Dependencia" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Tipo */}
+                <FormField
+                  control={form.control}
+                  name="tipo"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Tipo</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Tipo" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

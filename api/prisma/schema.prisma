@@ -25,8 +25,15 @@ model Employee {
   number    String        @unique
   name      String
   photoUrl  String?
+  pension     String?
+  dependencia String?
+  email       String?
+  telefono    String?
+  tipo        String?
   cards     Card[]
   accesses  AccessLog[]
+  replacedAs      Replacement[] @relation("OriginalEmployee")
+  replacementFor  Replacement[] @relation("ReplacementEmployee")
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
@@ -50,4 +57,14 @@ model AccessLog {
 enum AccessMethod {
   RFID
   MANUAL
+}
+
+model Replacement {
+  id                     Int      @id @default(autoincrement())
+  originalEmployeeId     Int
+  originalEmployee       Employee @relation("OriginalEmployee", fields: [originalEmployeeId], references: [id])
+  replacementEmployeeId  Int
+  replacementEmployee    Employee @relation("ReplacementEmployee", fields: [replacementEmployeeId], references: [id])
+  kioskId                String?
+  createdAt              DateTime @default(now())
 }

@@ -17,4 +17,24 @@ export class CreateEmployeeDto {
   @IsOptional()
   @IsString()
   photoUrl?: string | null;
+
+  @IsOptional()
+  @IsString()
+  pension?: string;
+
+  @IsOptional()
+  @IsString()
+  dependencia?: string;
+
+  @IsOptional()
+  @IsString()
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  telefono?: string;
+
+  @IsOptional()
+  @IsString()
+  tipo?: string;
 }

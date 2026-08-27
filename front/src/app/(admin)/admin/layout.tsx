@@ -4,7 +4,7 @@ import type React from "react";
 
 import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { BarChart3, Users, Clock, LogIn, Menu, Bell, User } from "lucide-react";
+import { BarChart3, Users, Clock, LogIn, Menu, Bell, User, Repeat, FileText } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -103,6 +103,18 @@ export default function AdminLayout({
             label="Entrada Manual"
             href="/admin/access/manual"
             active={pathname === "/admin/access/manual"}
+          />
+          <SidebarItem
+            icon={Repeat}
+            label="Reemplazos"
+            href="/admin/replacements"
+            active={pathname === "/admin/replacements"}
+          />
+          <SidebarItem
+            icon={FileText}
+            label="Reportes"
+            href="/admin/reports"
+            active={pathname === "/admin/reports"}
           />
         </nav>
       </aside>

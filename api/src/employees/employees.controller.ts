@@ -9,7 +9,6 @@ import {
   ParseIntPipe,
   UseGuards,
   NotFoundException,
-  ConflictException,
 } from '@nestjs/common';
 import { EmployeesService } from './employees.service';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
@@ -79,9 +78,13 @@ export class EmployeesController {
       return { ok: true, action: 'ALREADY_LINKED' };
     }
 
-    /* 2C. Existe y pertenece a OTRO empleado → conflicto */
-    throw new ConflictException(
-      `Este UID ya está asignado al empleado #${existing.employeeId}`,
-    );
+    /* 2C. Existe y pertenece a OTRO empleado → reasignar (ej. tarjeta
+     * migrada de un servidor viejo, o reutilizada tras dar de baja
+     * al dueño anterior). */
+    await this.prisma.card.update({
+      where: { uid: dto.uid },
+      data: { employeeId: emp.id },
+    });
+    return { ok: true, action: 'REASSIGNED', previousEmployeeId: existing.employeeId };
   }
 }
